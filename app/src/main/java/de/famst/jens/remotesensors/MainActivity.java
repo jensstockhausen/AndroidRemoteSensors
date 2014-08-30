@@ -2,24 +2,32 @@ package de.famst.jens.remotesensors;
 
 import android.app.Activity;
 import android.hardware.SensorManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.io.IOException;
+
 import de.famst.jens.remotesensors.biz.Orientation;
 import de.famst.jens.remotesensors.biz.OrientationListener;
 import de.famst.jens.remotesensors.biz.SensorListener;
-
+import de.famst.jens.remotesensors.http.HttpServer;
+import de.famst.jens.remotesensors.http.IpInformation;
 
 public class MainActivity extends Activity implements OrientationListener
 {
     private SensorListener sensorListener = null;
 
-    TextView azValue = null;
-    TextView elValue = null;
-    TextView roValue = null;
+    private HttpServer httpServer = null;
+    private IpInformation ipInformation = null;
+
+    private TextView azValue = null;
+    private TextView elValue = null;
+    private TextView roValue = null;
+
+    private TextView ipValue = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,6 +36,15 @@ public class MainActivity extends Activity implements OrientationListener
         setContentView(R.layout.activity_main);
 
         sensorListener = new SensorListener((SensorManager)getSystemService(SENSOR_SERVICE));
+        ipInformation = new IpInformation((WifiManager) getSystemService(WIFI_SERVICE));
+
+        try
+        {
+            httpServer = new HttpServer(8080);
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -41,14 +58,28 @@ public class MainActivity extends Activity implements OrientationListener
 
         sensorListener.registerOrientationListener(this);
         sensorListener.resume();
+
+        try
+        {
+            httpServer.start();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        ipValue = (TextView) findViewById(R.id.textViewIpValue);
+        ipValue.setText(ipInformation.getCurrentIp());
     }
 
     @Override
     protected void onPause()
     {
-        super.onPause();
+        httpServer.stop();
+
         sensorListener.suspend();
         sensorListener.unregisterOrientationListener(this);
+
+        super.onPause();
     }
 
     @Override
@@ -64,22 +95,24 @@ public class MainActivity extends Activity implements OrientationListener
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+
+        if (id == R.id.action_settings)
+        {
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onOrientationChanged(Orientation newOrientation)
     {
-        //Log.d("Orientation",newOrientation.toString());
         if ( (azValue!= null) && (elValue != null) && (roValue != null))
         {
             azValue.setText(String.format("%6.1f°", newOrientation.getAzimuthInDegrees()));
             elValue.setText(String.format("%6.1f°", newOrientation.getElevationInDegrees()));
             roValue.setText(String.format("%6.1f°", newOrientation.getRollInDegrees()));
         }
-
     }
+
 }

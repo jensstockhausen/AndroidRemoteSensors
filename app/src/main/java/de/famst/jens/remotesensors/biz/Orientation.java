@@ -9,8 +9,8 @@ public class Orientation
     private float elevationInDegrees;
     private float rollInDegrees;
 
-    final float pi = (float) Math.PI;
-    final float rad2deg = 180/pi;
+    private final float pi = (float) Math.PI;
+    private final float rad2deg = 180 / pi;
 
     public Orientation()
     {
