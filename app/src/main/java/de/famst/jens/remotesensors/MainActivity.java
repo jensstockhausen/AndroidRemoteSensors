@@ -112,6 +112,8 @@ public class MainActivity extends Activity implements OrientationListener
             azValue.setText(String.format("%6.1f°", newOrientation.getAzimuthInDegrees()));
             elValue.setText(String.format("%6.1f°", newOrientation.getElevationInDegrees()));
             roValue.setText(String.format("%6.1f°", newOrientation.getRollInDegrees()));
+
+            httpServer.setOrientation(newOrientation);
         }
     }
 
