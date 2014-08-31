@@ -4,11 +4,11 @@
         android:title="Network">
 
         <EditTextPreference
-            android:key="icp_port"
+            android:key="tcp_port"
             android:summary="Please enter to TCP/IP port to be used"
             android:title="Port"
             android:inputType="number"
-            android:defaultValue="8081" />
+            android:defaultValue="8080" />
 
     </PreferenceCategory>
 

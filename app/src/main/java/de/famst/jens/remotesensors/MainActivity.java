@@ -2,9 +2,11 @@ package de.famst.jens.remotesensors;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -21,6 +23,7 @@ import de.famst.jens.remotesensors.http.IpInformation;
 public class MainActivity extends Activity implements OnChangeListener
 {
     private DataModel model = null;
+    private SharedPreferences prefs;
 
     private SensorListener sensorListener = null;
 
@@ -32,7 +35,8 @@ public class MainActivity extends Activity implements OnChangeListener
     private TextView roValue = null;
 
     private TextView ipValue = null;
-    private TextView ipPort = null;
+    private TextView ipPortValue = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -43,13 +47,17 @@ public class MainActivity extends Activity implements OnChangeListener
         model = new DataModel();
         model.addListener(this);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         sensorListener = new SensorListener((SensorManager) getSystemService(SENSOR_SERVICE), model);
         ipInformation = new IpInformation((WifiManager) getSystemService(WIFI_SERVICE), model);
 
         try
         {
-            httpServer = new HttpServer(8080, model);
-        } catch (IOException e)
+            int port = Integer.valueOf(prefs.getString("tcp_port", "8080"));
+            httpServer = new HttpServer(port, model);
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -77,8 +85,8 @@ public class MainActivity extends Activity implements OnChangeListener
         ipValue = (TextView) findViewById(R.id.textViewIpValue);
         ipValue.setText(ipInformation.getCurrentIp());
 
-        ipPort = (TextView) findViewById(R.id.textViewIpPort);
-        ipPort.setText("8080");
+        ipPortValue = (TextView) findViewById(R.id.textViewIpPort);
+        ipPortValue.setText("" + httpServer.getListeningPort());
     }
 
     @Override
@@ -91,14 +99,16 @@ public class MainActivity extends Activity implements OnChangeListener
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -127,7 +137,7 @@ public class MainActivity extends Activity implements OnChangeListener
 
     private void updateOrientation(Orientation orientation)
     {
-        if ( (azValue!= null) && (elValue != null) && (roValue != null))
+        if ((azValue != null) && (elValue != null) && (roValue != null))
         {
             azValue.setText(String.format("%6.1f°", orientation.getAzimuthInDegrees()));
             elValue.setText(String.format("%6.1f°", orientation.getElevationInDegrees()));
