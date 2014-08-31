@@ -22,6 +22,8 @@ public class SensorListener implements SensorEventListener
     private float[] acceleration;
     private float[] geomagnetic;
 
+    final private float[] unitVector = {1.0f, 0.0f, 0.0f};
+
     public SensorListener(SensorManager sensorManager, DataModel model)
     {
         this.sensorManager = sensorManager;
@@ -66,7 +68,9 @@ public class SensorListener implements SensorEventListener
             float R[] = new float[9];
             float I[] = new float[9];
 
-            boolean success = SensorManager.getRotationMatrix(R, I, acceleration, geomagnetic);
+            boolean success;
+
+            success = SensorManager.getRotationMatrix(R, I, acceleration, geomagnetic);
 
             if (success)
             {
@@ -75,6 +79,17 @@ public class SensorListener implements SensorEventListener
 
                 model.setOrientation(new Orientation((orientationRad)));
             }
+
+            success = SensorManager.getRotationMatrix(R, I, acceleration, unitVector);
+
+            if (success)
+            {
+                float orientationRad[] = new float[3];
+                SensorManager.getOrientation(R, orientationRad);
+
+                model.setOrientationGravity(new Orientation((orientationRad)));
+            }
+
         }
     }
 

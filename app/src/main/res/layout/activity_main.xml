@@ -61,7 +61,8 @@
                     android:text="@string/empty_float_value"
                     android:id="@+id/textViewAzValue"
                     android:textSize="@dimen/test_small"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:layout_column="2" />
             </TableRow>
 
             <TableRow
@@ -81,7 +82,8 @@
                     android:text="@string/empty_float_value"
                     android:id="@+id/textViewElValue"
                     android:textSize="@dimen/test_small"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:layout_column="2" />
             </TableRow>
 
             <TableRow
@@ -101,11 +103,92 @@
                     android:text="@string/empty_float_value"
                     android:id="@+id/textViewRoValue"
                     android:textSize="@dimen/test_small"
-                    android:gravity="end" />
+                    android:gravity="end"
+                    android:layout_column="2" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
             </TableRow>
 
 
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <Space
+                    android:layout_width="fill_parent"
+                    android:layout_height="20dp"
+                    android:layout_column="1" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/elevation_"
+                    android:id="@+id/textViewElGr"
+                    android:textSize="@dimen/test_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/empty_float_value"
+                    android:id="@+id/textViewElValueGr"
+                    android:textSize="@dimen/test_small"
+                    android:gravity="end"
+                    android:layout_column="2" />
+            </TableRow>
+
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/roll_"
+                    android:id="@+id/textViewRoGr"
+                    android:textSize="@dimen/test_small" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/empty_float_value"
+                    android:id="@+id/textViewRoValueGr"
+                    android:textSize="@dimen/test_small"
+                    android:gravity="end"
+                    android:layout_column="2" />
+            </TableRow>
+
         </TableLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="end">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/level"
+                android:id="@+id/buttonLevel"
+                android:layout_gravity="right" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reset"
+                android:id="@+id/buttonReset" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

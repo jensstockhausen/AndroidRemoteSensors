@@ -1,0 +1,14 @@
+<resources>
+
+    <string name="IP_">IP:</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="app_name">Remote Sensor</string>
+    <string name="azimuth_">Azimuth:</string>
+    <string name="current_values">Aktuelle Werte</string>
+    <string name="elevation_">Elevation:</string>
+    <string name="level">Nivellieren</string>
+    <string name="network">Netzwerk</string>
+    <string name="orientation">Orientierung</string>
+    <string name="roll_">Roll:</string>
+
+</resources>

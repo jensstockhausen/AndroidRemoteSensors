@@ -36,6 +36,14 @@ public class Orientation
         this.rollInDegrees = orientationInRad[2] * rad2deg;
     }
 
+    public Orientation substractOffset(Orientation offset)
+    {
+        return new Orientation(
+                azimuthInDegrees - offset.getAzimuthInDegrees(),
+                elevationInDegrees - offset.getElevationInDegrees(),
+                rollInDegrees - offset.getRollInDegrees());
+    }
+
     @Override
     public String toString()
     {
@@ -63,7 +71,8 @@ public class Orientation
             jsonObject.put("values", jsonVal);
 
             return jsonObject.toString();
-        } catch (JSONException ex)
+        }
+        catch (JSONException ex)
         {
             ex.printStackTrace();
         }

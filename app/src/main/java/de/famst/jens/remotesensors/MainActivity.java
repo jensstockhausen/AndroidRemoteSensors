@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import de.famst.jens.remotesensors.biz.DataModel;
 import de.famst.jens.remotesensors.biz.OnChangeListener;
 import de.famst.jens.remotesensors.biz.Orientation;
+import de.famst.jens.remotesensors.controller.LevelListener;
 import de.famst.jens.remotesensors.controller.SensorListener;
 import de.famst.jens.remotesensors.http.HttpServer;
 import de.famst.jens.remotesensors.http.IpInformation;
@@ -33,6 +35,9 @@ public class MainActivity extends Activity implements OnChangeListener
     private TextView azValue = null;
     private TextView elValue = null;
     private TextView roValue = null;
+    private TextView elValueGr = null;
+    private TextView roValueGr = null;
+
 
     private TextView ipValue = null;
     private TextView ipPortValue = null;
@@ -51,6 +56,12 @@ public class MainActivity extends Activity implements OnChangeListener
 
         sensorListener = new SensorListener((SensorManager) getSystemService(SENSOR_SERVICE), model);
         ipInformation = new IpInformation((WifiManager) getSystemService(WIFI_SERVICE), model);
+
+        Button buttonLevel = (Button) findViewById(R.id.buttonLevel);
+        Button buttonReset = (Button) findViewById(R.id.buttonReset);
+        LevelListener levelListener = new LevelListener(model);
+        buttonLevel.setOnClickListener(levelListener);
+        buttonReset.setOnClickListener(levelListener);
 
         try
         {
@@ -72,12 +83,16 @@ public class MainActivity extends Activity implements OnChangeListener
         elValue = (TextView) findViewById(R.id.textViewElValue);
         roValue = (TextView) findViewById(R.id.textViewRoValue);
 
+        elValueGr = (TextView) findViewById(R.id.textViewElValueGr);
+        roValueGr = (TextView) findViewById(R.id.textViewRoValueGr);
+
         sensorListener.resume();
 
         try
         {
             httpServer.start();
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -129,19 +144,30 @@ public class MainActivity extends Activity implements OnChangeListener
     public void onChange(Object model)
     {
         DataModel dataModel = (DataModel) model;
-        Orientation orientation = dataModel.getOrientation();
-
-        updateOrientation(orientation);
+        updateOrientation(dataModel);
     }
 
 
-    private void updateOrientation(Orientation orientation)
+    private void updateOrientation(DataModel model)
     {
+        Orientation orientation = model.getOrientation();
+        Orientation corrected = orientation.substractOffset(model.getOffsetOrientation());
+
+
         if ((azValue != null) && (elValue != null) && (roValue != null))
         {
-            azValue.setText(String.format("%6.1f°", orientation.getAzimuthInDegrees()));
-            elValue.setText(String.format("%6.1f°", orientation.getElevationInDegrees()));
-            roValue.setText(String.format("%6.1f°", orientation.getRollInDegrees()));
+            azValue.setText(String.format("%6.1f°", corrected.getAzimuthInDegrees()));
+            elValue.setText(String.format("%6.1f°", corrected.getElevationInDegrees()));
+            roValue.setText(String.format("%6.1f°", corrected.getRollInDegrees()));
+        }
+
+        Orientation grav = model.getOrientationGravity();
+        grav = grav.substractOffset(model.getOffsetOrientation());
+
+        if ((elValueGr != null) && (roValueGr != null))
+        {
+            elValueGr.setText(String.format("%6.1f°", grav.getElevationInDegrees()));
+            roValueGr.setText(String.format("%6.1f°", grav.getRollInDegrees()));
         }
     }
 

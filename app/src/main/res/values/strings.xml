@@ -14,5 +14,7 @@
     <string name="empty_ip">-.-.-.-</string>
     <string name="IP_">IP:</string>
     <string name="empty_port">----</string>
+    <string name="level">Level</string>
+    <string name="reset">Reset</string>
 
 </resources>
