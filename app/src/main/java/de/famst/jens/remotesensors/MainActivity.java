@@ -1,6 +1,7 @@
 package de.famst.jens.remotesensors;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -105,6 +106,8 @@ public class MainActivity extends Activity implements OnChangeListener
 
         if (id == R.id.action_settings)
         {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            this.startActivity(intent);
             return true;
         }
 

@@ -22,4 +22,5 @@ android {
 dependencies {
     //compile 'org.kevoree.corelibrary.android:org.kevoree.library.android.nanohttp:2.0.5'
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:20.0.0'
 }

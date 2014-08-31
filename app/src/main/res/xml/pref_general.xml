@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:summary="Network Settings"
+        android:title="Network">
+
+        <EditTextPreference
+            android:key="icp_port"
+            android:summary="Please enter to TCP/IP port to be used"
+            android:title="Port"
+            android:inputType="number"
+            android:defaultValue="8081" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
