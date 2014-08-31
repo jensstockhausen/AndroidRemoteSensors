@@ -52,9 +52,15 @@ public class Orientation
         {
             JSONObject jsonObject = new JSONObject();
 
-            jsonObject.put("azimuth", "" + azimuthInDegrees);
-            jsonObject.put("elevation", "" + elevationInDegrees);
-            jsonObject.put("roll", "" + rollInDegrees);
+            jsonObject.put("type", "orientation");
+
+            JSONObject jsonVal = new JSONObject();
+
+            jsonVal.put("azimuth", "" + azimuthInDegrees);
+            jsonVal.put("elevation", "" + elevationInDegrees);
+            jsonVal.put("roll", "" + rollInDegrees);
+
+            jsonObject.put("values", jsonVal);
 
             return jsonObject.toString();
         } catch (JSONException ex)

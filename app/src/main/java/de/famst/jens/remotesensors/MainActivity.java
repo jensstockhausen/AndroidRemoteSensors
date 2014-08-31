@@ -31,6 +31,7 @@ public class MainActivity extends Activity implements OnChangeListener
     private TextView roValue = null;
 
     private TextView ipValue = null;
+    private TextView ipPort = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -74,6 +75,9 @@ public class MainActivity extends Activity implements OnChangeListener
 
         ipValue = (TextView) findViewById(R.id.textViewIpValue);
         ipValue.setText(ipInformation.getCurrentIp());
+
+        ipPort = (TextView) findViewById(R.id.textViewIpPort);
+        ipPort.setText("8080");
     }
 
     @Override

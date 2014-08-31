@@ -13,5 +13,6 @@
     <string name="network">Network</string>
     <string name="empty_ip">-.-.-.-</string>
     <string name="IP_">IP:</string>
+    <string name="empty_port">----</string>
 
 </resources>
