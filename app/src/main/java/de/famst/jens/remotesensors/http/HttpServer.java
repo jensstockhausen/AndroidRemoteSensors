@@ -2,6 +2,7 @@ package de.famst.jens.remotesensors.http;
 
 import java.io.IOException;
 
+import de.famst.jens.remotesensors.biz.DataModel;
 import de.famst.jens.remotesensors.biz.Orientation;
 import fi.iki.elonen.NanoHTTPD;
 
@@ -10,31 +11,23 @@ import fi.iki.elonen.NanoHTTPD;
  */
 public class HttpServer extends NanoHTTPD
 {
-    private Orientation orientation;
+    private DataModel model;
 
-    public HttpServer(int port) throws IOException
+    public HttpServer(int port, DataModel model) throws IOException
     {
         super(port);
-    }
-
-    public void setOrientation(Orientation orientation)
-    {
-        this.orientation = orientation;
+        this.model = model;
     }
 
     @Override
     public Response serve(IHTTPSession session)
     {
+        Orientation orientation = model.getOrientation();
+
         String html = "";
 
         html += "<html><head><head><body>";
-        if (orientation != null)
-        {
-            html += orientation.toString();
-        } else
-        {
-            html += "-- -- --";
-        }
+        html += orientation.toString();
         html += "</body></html>";
 
         return new Response(html);

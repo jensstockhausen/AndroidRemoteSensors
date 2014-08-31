@@ -10,14 +10,17 @@ import android.widget.TextView;
 
 import java.io.IOException;
 
+import de.famst.jens.remotesensors.biz.DataModel;
+import de.famst.jens.remotesensors.biz.OnChangeListener;
 import de.famst.jens.remotesensors.biz.Orientation;
-import de.famst.jens.remotesensors.biz.OrientationListener;
-import de.famst.jens.remotesensors.biz.SensorListener;
+import de.famst.jens.remotesensors.controller.SensorListener;
 import de.famst.jens.remotesensors.http.HttpServer;
 import de.famst.jens.remotesensors.http.IpInformation;
 
-public class MainActivity extends Activity implements OrientationListener
+public class MainActivity extends Activity implements OnChangeListener
 {
+    private DataModel model = null;
+
     private SensorListener sensorListener = null;
 
     private HttpServer httpServer = null;
@@ -35,12 +38,15 @@ public class MainActivity extends Activity implements OrientationListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sensorListener = new SensorListener((SensorManager)getSystemService(SENSOR_SERVICE));
-        ipInformation = new IpInformation((WifiManager) getSystemService(WIFI_SERVICE));
+        model = new DataModel();
+        model.addListener(this);
+
+        sensorListener = new SensorListener((SensorManager) getSystemService(SENSOR_SERVICE), model);
+        ipInformation = new IpInformation((WifiManager) getSystemService(WIFI_SERVICE), model);
 
         try
         {
-            httpServer = new HttpServer(8080);
+            httpServer = new HttpServer(8080, model);
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -56,7 +62,6 @@ public class MainActivity extends Activity implements OrientationListener
         elValue = (TextView) findViewById(R.id.textViewElValue);
         roValue = (TextView) findViewById(R.id.textViewRoValue);
 
-        sensorListener.registerOrientationListener(this);
         sensorListener.resume();
 
         try
@@ -75,9 +80,7 @@ public class MainActivity extends Activity implements OrientationListener
     protected void onPause()
     {
         httpServer.stop();
-
         sensorListener.suspend();
-        sensorListener.unregisterOrientationListener(this);
 
         super.onPause();
     }
@@ -104,16 +107,24 @@ public class MainActivity extends Activity implements OrientationListener
         return super.onOptionsItemSelected(item);
     }
 
+
     @Override
-    public void onOrientationChanged(Orientation newOrientation)
+    public void onChange(Object model)
+    {
+        DataModel dataModel = (DataModel) model;
+        Orientation orientation = dataModel.getOrientation();
+
+        updateOrientation(orientation);
+    }
+
+
+    private void updateOrientation(Orientation orientation)
     {
         if ( (azValue!= null) && (elValue != null) && (roValue != null))
         {
-            azValue.setText(String.format("%6.1f°", newOrientation.getAzimuthInDegrees()));
-            elValue.setText(String.format("%6.1f°", newOrientation.getElevationInDegrees()));
-            roValue.setText(String.format("%6.1f°", newOrientation.getRollInDegrees()));
-
-            httpServer.setOrientation(newOrientation);
+            azValue.setText(String.format("%6.1f°", orientation.getAzimuthInDegrees()));
+            elValue.setText(String.format("%6.1f°", orientation.getElevationInDegrees()));
+            roValue.setText(String.format("%6.1f°", orientation.getRollInDegrees()));
         }
     }
 

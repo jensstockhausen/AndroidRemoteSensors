@@ -1,16 +1,20 @@
-package de.famst.jens.remotesensors.biz;
+package de.famst.jens.remotesensors.controller;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
+
+import de.famst.jens.remotesensors.biz.DataModel;
+import de.famst.jens.remotesensors.biz.Orientation;
 
 /**
  * Created by jens on 30/08/14.
  */
 public class SensorListener implements SensorEventListener
 {
+    private DataModel model = null;
+
     private SensorManager sensorManager = null;
     private Sensor accelerometer = null;
     private Sensor magneticField = null;
@@ -18,11 +22,10 @@ public class SensorListener implements SensorEventListener
     private float[] acceleration;
     private float[] geomagnetic;
 
-    private OrientationListener orientationListener = null;
-
-    public SensorListener(SensorManager sensorManager)
+    public SensorListener(SensorManager sensorManager, DataModel model)
     {
         this.sensorManager = sensorManager;
+        this.model = model;
 
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -39,25 +42,11 @@ public class SensorListener implements SensorEventListener
         sensorManager.unregisterListener(this);
     }
 
-    public void registerOrientationListener(OrientationListener orientationListener)
-    {
-        this.orientationListener = orientationListener;
-    }
-
-    public void unregisterOrientationListener(OrientationListener orientationListener)
-    {
-        if (this.orientationListener == orientationListener)
-        {
-            this.orientationListener = null;
-        }
-    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i)
     {
-
     }
-
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent)
@@ -84,12 +73,7 @@ public class SensorListener implements SensorEventListener
                 float orientationRad[] = new float[3];
                 SensorManager.getOrientation(R, orientationRad);
 
-                Orientation orientationDeg = new Orientation(orientationRad);
-
-                if (orientationListener != null)
-                {
-                    orientationListener.onOrientationChanged(orientationDeg);
-                }
+                model.setOrientation(new Orientation((orientationRad)));
             }
         }
     }

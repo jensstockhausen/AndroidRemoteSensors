@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Values"
+            android:text="@string/current_values"
             android:id="@+id/textView"
             android:layout_gravity="center_horizontal"
             android:textStyle="bold"
@@ -38,7 +38,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Orientation"
+                    android:text="@string/orientation"
                     android:id="@+id/textView2"
                     android:textSize="@dimen/test_small"
                     android:textStyle="bold" />
@@ -51,17 +51,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Azimuth:"
+                    android:text="@string/azimuth_"
                     android:id="@+id/textViewAz"
                     android:textSize="@dimen/test_small" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+-0.0"
+                    android:text="@string/empty_float_value"
                     android:id="@+id/textViewAzValue"
                     android:textSize="@dimen/test_small"
-                    android:gravity="right" />
+                    android:gravity="end" />
             </TableRow>
 
             <TableRow
@@ -71,17 +71,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Elevation:"
+                    android:text="@string/elevation_"
                     android:id="@+id/textViewEl"
                     android:textSize="@dimen/test_small" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+-0.0"
+                    android:text="@string/empty_float_value"
                     android:id="@+id/textViewElValue"
                     android:textSize="@dimen/test_small"
-                    android:gravity="right" />
+                    android:gravity="end" />
             </TableRow>
 
             <TableRow
@@ -91,17 +91,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Roll:"
+                    android:text="@string/roll_"
                     android:id="@+id/textViewRo"
                     android:textSize="@dimen/test_small" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+-0.0"
+                    android:text="@string/empty_float_value"
                     android:id="@+id/textViewRoValue"
                     android:textSize="@dimen/test_small"
-                    android:gravity="right" />
+                    android:gravity="end" />
             </TableRow>
 
 
@@ -110,7 +110,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Network"
+            android:text="@string/network"
             android:id="@+id/textView3"
             android:layout_gravity="center_horizontal"
             android:textSize="@dimen/text_large"
@@ -128,7 +128,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="IP:"
+                    android:text="@string/IP_"
                     android:id="@+id/textViewIp"
                     android:layout_column="0"
                     android:textSize="@dimen/test_small" />
@@ -136,10 +136,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0.0.0.0"
+                    android:text="@string/empty_ip"
                     android:id="@+id/textViewIpValue"
                     android:layout_column="1"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:textSize="@dimen/test_small" />
             </TableRow>
         </TableLayout>
