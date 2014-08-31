@@ -13,24 +13,25 @@ public class HttpServer extends NanoHTTPD
 {
     private DataModel model;
 
+    private static final String MIME_JSON = "application/json";
+
     public HttpServer(int port, DataModel model) throws IOException
     {
         super(port);
         this.model = model;
     }
 
+
     @Override
     public Response serve(IHTTPSession session)
     {
-        Orientation orientation = model.getOrientation();
+        if (session.getUri().startsWith("/orientation"))
+        {
+            Orientation orientation = model.getOrientation();
+            return new Response(Response.Status.OK, MIME_JSON, orientation.toJSON());
+        }
 
-        String html = "";
-
-        html += "<html><head><head><body>";
-        html += orientation.toString();
-        html += "</body></html>";
-
-        return new Response(html);
+        return new Response("<html><head></head><body>online</body></html>");
     }
 
 }
