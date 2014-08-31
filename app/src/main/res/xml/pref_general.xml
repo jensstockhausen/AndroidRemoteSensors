@@ -12,4 +12,16 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:summary="Sensor Settings"
+        android:title="Sensors">
+
+        <CheckBoxPreference
+            android:key="do_average"
+            android:title="Do Average"
+            android:summary="Average all sensor values over time"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

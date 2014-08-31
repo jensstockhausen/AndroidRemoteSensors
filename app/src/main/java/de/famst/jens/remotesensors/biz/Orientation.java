@@ -44,6 +44,16 @@ public class Orientation
                 rollInDegrees - offset.getRollInDegrees());
     }
 
+
+    public Orientation average(Orientation newOrient)
+    {
+        return new Orientation(
+                (azimuthInDegrees + newOrient.getAzimuthInDegrees()) * 0.5f,
+                (elevationInDegrees + newOrient.getElevationInDegrees()) * 0.5f,
+                (rollInDegrees + newOrient.getRollInDegrees()) * 0.5f);
+    }
+
+
     @Override
     public String toString()
     {
@@ -108,4 +118,6 @@ public class Orientation
     {
         this.rollInDegrees = rollInDegrees;
     }
+
+
 }

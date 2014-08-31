@@ -5,6 +5,8 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import java.util.LinkedList;
+
 import de.famst.jens.remotesensors.biz.DataModel;
 import de.famst.jens.remotesensors.biz.Orientation;
 
@@ -24,8 +26,39 @@ public class SensorListener implements SensorEventListener
 
     final private float[] unitVector = {1.0f, 0.0f, 0.0f};
 
+    class Accumulator extends LinkedList<Float>
+    {
+        private Float value = 0.0f;
+
+        public void addValue(Float value)
+        {
+            this.value += value;
+
+            add(value);
+
+            if (size() > 100)
+            {
+                this.value -= removeFirst();
+            }
+        }
+
+        public Float getMean()
+        {
+            return value / new Float(size());
+        }
+    }
+
+    final private Accumulator[] acc = new Accumulator[3];
+    final private Accumulator[] accGr = new Accumulator[3];
+
     public SensorListener(SensorManager sensorManager, DataModel model)
     {
+        for (int i = 0; i < 3; i++)
+        {
+            acc[i] = new Accumulator();
+            accGr[i] = new Accumulator();
+        }
+
         this.sensorManager = sensorManager;
         this.model = model;
 
@@ -77,7 +110,24 @@ public class SensorListener implements SensorEventListener
                 float orientationRad[] = new float[3];
                 SensorManager.getOrientation(R, orientationRad);
 
-                model.setOrientation(new Orientation((orientationRad)));
+                for (int i = 0; i < 3; i++)
+                {
+                    acc[i].addValue(orientationRad[i]);
+                }
+
+                if (!model.getDoAverage())
+                {
+                    model.setOrientation(new Orientation(orientationRad));
+                } else
+                {
+                    float a[] = new float[3];
+                    for (int i = 0; i < 3; i++)
+                    {
+                        a[i] = acc[i].getMean();
+                    }
+
+                    model.setOrientation(new Orientation(a));
+                }
             }
 
             success = SensorManager.getRotationMatrix(R, I, acceleration, unitVector);
@@ -87,7 +137,24 @@ public class SensorListener implements SensorEventListener
                 float orientationRad[] = new float[3];
                 SensorManager.getOrientation(R, orientationRad);
 
-                model.setOrientationGravity(new Orientation((orientationRad)));
+                for (int i = 0; i < 3; i++)
+                {
+                    accGr[i].addValue(orientationRad[i]);
+                }
+
+                if (!model.getDoAverage())
+                {
+                    model.setOrientationGravity(new Orientation(orientationRad));
+                } else
+                {
+                    float a[] = new float[3];
+                    for (int i = 0; i < 3; i++)
+                    {
+                        a[i] = accGr[i].getMean();
+                    }
+
+                    model.setOrientationGravity(new Orientation(a));
+                }
             }
 
         }

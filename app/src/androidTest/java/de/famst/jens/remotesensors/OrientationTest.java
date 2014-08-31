@@ -40,5 +40,18 @@ public class OrientationTest extends TestCase
         assertEquals(2.7f, orient.getRollInDegrees());
     }
 
+    public void test_AverageOrientation()
+    {
+        Orientation oldOrient = new Orientation(1.0f, 2.0f, 3.0f);
+        Orientation newOrient = new Orientation(3.0f, 4.0f, 5.0f);
+
+        newOrient = newOrient.average(oldOrient);
+
+        assertEquals(2.0f, newOrient.getAzimuthInDegrees());
+        assertEquals(3.0f, newOrient.getElevationInDegrees());
+        assertEquals(4.0f, newOrient.getRollInDegrees());
+
+    }
+
 
 }

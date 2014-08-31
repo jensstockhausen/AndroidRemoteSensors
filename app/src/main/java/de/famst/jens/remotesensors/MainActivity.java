@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -49,10 +50,15 @@ public class MainActivity extends Activity implements OnChangeListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
         model = new DataModel();
         model.addListener(this);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean doAverage = prefs.getBoolean("do_average", false);
+        model.setDoAverage(doAverage);
+
+        Log.d("Average", "" + doAverage);
 
         sensorListener = new SensorListener((SensorManager) getSystemService(SENSOR_SERVICE), model);
         ipInformation = new IpInformation((WifiManager) getSystemService(WIFI_SERVICE), model);
@@ -67,6 +73,8 @@ public class MainActivity extends Activity implements OnChangeListener
         {
             int port = Integer.valueOf(prefs.getString("tcp_port", "8080"));
             httpServer = new HttpServer(port, model);
+
+            Log.d("HTTP", "Port: " + httpServer.getListeningPort());
         }
         catch (IOException e)
         {
